@@ -8,15 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Timers;
 
 namespace AimTrainer
 {
     internal class Game
     {
-        private int score = 0;
-        private static System.Timers.Timer newTimer;
         private static Stopwatch stopwatch = new Stopwatch();
+        private int score = 0;
         private int nombreDeTirTouche = 0;
         private int nombreDeTirLoupe = 0;
         private int nombreDeTirs;
@@ -64,7 +62,6 @@ namespace AimTrainer
         {
             Console.Clear();
             Console.CursorVisible = false;
-
             ConsoleMouse.EnableMouse();
 
             target.DrawTarget();
@@ -72,9 +69,10 @@ namespace AimTrainer
 
             // Chrono
             Stopwatch chrono = Stopwatch.StartNew();
+            stopwatch.Restart();
             int tempsLimiteSec = 30;
 
-            AfficherInterface(chrono.Elapsed.TotalSeconds);
+            AfficherInterface();
 
 
             while (chrono.Elapsed.TotalSeconds < tempsLimiteSec)
@@ -85,6 +83,7 @@ namespace AimTrainer
 
                 if(click == null)
                 {
+                    AfficherInterface();
                     Thread.Sleep(5);
                     continue;
                 }
@@ -126,8 +125,10 @@ namespace AimTrainer
                     TargetMissed();
                 }
 
-                AfficherInterface(chrono.Elapsed.TotalSeconds);
+                AfficherInterface();
             }
+
+            stopwatch.Stop();
 
             Console.Clear();
             Console.SetCursorPosition(0, 0);
@@ -135,32 +136,13 @@ namespace AimTrainer
             StatsAim();
             Console.ReadKey();
         }
-        private void AfficherInterface(double timeLeft)
-        {
-            Console.SetCursorPosition(0, 0);
-            string test = ($"Score : {this.Score} | Cible touchés : {this.NombreDeTirTouche} | Cible Ratés : {this.NombreDeTirLoupe} | ");
-            string timerLeft = ($"Time : {timeLeft:F2}");
-            while (timeLeft < 30)
-            {
-                TimeSpan elapsed = stopwatch.Elapsed;
-                Console.Write($"\rThere are {elapsed:ss\\.fff} seconds passed.");
-            }
-            Console.Write(test.PadRight(Console.WindowWidth));
-        }
+
         private void AfficherInterface()
         {
             Console.SetCursorPosition(0, 0);
-            string test = ($"Score : {this.Score} | Cible touchés : {this.NombreDeTirTouche} | Cible Ratés : {this.NombreDeTirLoupe}");
+            string test = ($"Score : {this.Score} | Cible touchés : {this.NombreDeTirTouche} | Cible Ratés : {this.NombreDeTirLoupe} | Temps : {stopwatch.Elapsed:ss\\.f} s");
             Console.Write(test.PadRight(Console.WindowWidth));
         }
-
-        //private static void SetTimer(Stopwatch item1, System.Timers.Timer newTimer)
-        //{
-        //    newTimer = new System.Timers.Timer(1);
-        //    newTimer.Elapsed += OnTimedEvent;
-        //    newTimer.AutoReset = true;
-        //    newTimer.Enabled = true;
-        //}
 
         public void InformationEcran()
         {
@@ -180,6 +162,8 @@ namespace AimTrainer
 
             Console.WriteLine($"Le score est de {score} pts !");
         }
+
+
 
         public void TargetDestroyed()
         {
