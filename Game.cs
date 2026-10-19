@@ -1,5 +1,5 @@
-﻿// TODO : Timer on the screen : use the code I have left in the example codes : timer class.
-// TODO : Combo mechanic 
+﻿// TODO : Combo mechanic 
+// TODO : add Bonuses.
 
 using System;
 using System.Collections.Generic;
@@ -55,9 +55,9 @@ namespace AimTrainer
 
         public Game()
         {
-            target = new Target(3);
-            biggerTarget = new Target(5);
-            largeTarget = new Target(7);
+            target = new Target(3, 10);
+            biggerTarget = new Target(5, 5);
+            largeTarget = new Target(7, 2);
         }
 
         public void Start()
@@ -99,7 +99,7 @@ namespace AimTrainer
 
                 if(hitSmallTarget)
                 {
-                    TargetDestroyed();
+                    TargetDestroyed(target.Points);
                     target.Erase();
 
                     target.CoordX = rnd.Next(2, Console.WindowWidth - 3);
@@ -109,7 +109,7 @@ namespace AimTrainer
 
                 if (hitBigTarget)
                 {
-                    TargetDestroyed();
+                    TargetDestroyed(biggerTarget.Points);
                     biggerTarget.Erase();
 
                     biggerTarget.CoordX = rnd.Next(2, Console.WindowWidth - 5);
@@ -126,7 +126,7 @@ namespace AimTrainer
 
                 if(hitLTarget)
                 {
-                    TargetDestroyed();
+                    TargetDestroyed(largeTarget.Points);
                     largeTarget.Erase();
 
                     largeTarget.CoordX = rnd.Next(2, Console.WindowWidth - 7);
@@ -186,10 +186,10 @@ namespace AimTrainer
 
 
 
-        public void TargetDestroyed()
+        public void TargetDestroyed(int points)
         {
             this.NombreDeTirs++;
-            this.Score += 5;
+            this.Score += points;
             this.NombreDeTirTouche++;
         }
 
