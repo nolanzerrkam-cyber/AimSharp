@@ -69,6 +69,10 @@ namespace AimTrainer
             {
                 Console.Write("[-◎-]");
             }
+            else if(this.size == 7)
+            {
+                Console.Write("[==◎==]");
+            }
         }
 
         public void Erase()
@@ -82,6 +86,11 @@ namespace AimTrainer
             {
                 Console.Write("     ");
             }
+            else if(this.size == 7)
+            {
+                Console.Write("       ");
+            }
+
         }
 
         public bool IsHit(int clickX, int clickY)

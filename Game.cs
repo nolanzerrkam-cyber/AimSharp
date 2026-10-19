@@ -20,6 +20,7 @@ namespace AimTrainer
         private int nombreDeTirs;
         private Target target;
         private Target biggerTarget;
+        private Target largeTarget;
         private Random rnd = new Random();
 
         public int Score
@@ -56,6 +57,7 @@ namespace AimTrainer
         {
             target = new Target(3);
             biggerTarget = new Target(5);
+            largeTarget = new Target(7);
         }
 
         public void Start()
@@ -66,6 +68,7 @@ namespace AimTrainer
 
             target.DrawTarget();
             biggerTarget.DrawTarget();
+            largeTarget.DrawTarget();
 
             // Chrono
             Stopwatch chrono = Stopwatch.StartNew();
@@ -92,6 +95,7 @@ namespace AimTrainer
 
                 bool hitSmallTarget = target.IsHit(clickX, clickY);
                 bool hitBigTarget = biggerTarget.IsHit(clickX, clickY);
+                bool hitLTarget = largeTarget.IsHit(clickX, clickY);
 
                 if(hitSmallTarget)
                 {
@@ -108,19 +112,36 @@ namespace AimTrainer
                     TargetDestroyed();
                     biggerTarget.Erase();
 
-                    biggerTarget.CoordX = rnd.Next(2, Console.WindowWidth - 3);
-                    biggerTarget.CoordY = rnd.Next(2, Console.WindowHeight - 5);
+                    biggerTarget.CoordX = rnd.Next(2, Console.WindowWidth - 5);
+                    biggerTarget.CoordY = rnd.Next(2, Console.WindowHeight - 8);
 
-                    while(target.CoordY == biggerTarget.CoordY || target.CoordX == biggerTarget.CoordX)
+                    while (target.CoordY == biggerTarget.CoordY || target.CoordX == biggerTarget.CoordX || target.CoordY == largeTarget.CoordY || target.CoordX == largeTarget.CoordX)
                     {
-                        biggerTarget.CoordX = rnd.Next(2, Console.WindowWidth - 3);
-                        biggerTarget.CoordY = rnd.Next(2, Console.WindowHeight - 5);
+                        biggerTarget.CoordX = rnd.Next(2, Console.WindowWidth - 5);
+                        biggerTarget.CoordY = rnd.Next(2, Console.WindowHeight - 8);
                     }
 
                     biggerTarget.DrawTarget();
                 }
 
-                if (!hitSmallTarget && !hitBigTarget)
+                if(hitLTarget)
+                {
+                    TargetDestroyed();
+                    largeTarget.Erase();
+
+                    largeTarget.CoordX = rnd.Next(2, Console.WindowWidth - 7);
+                    largeTarget.CoordY = rnd.Next(2, Console.WindowHeight - 10);
+
+                    while (largeTarget.CoordY == biggerTarget.CoordY || largeTarget.CoordX == biggerTarget.CoordX || largeTarget.CoordY == target.CoordY || largeTarget.CoordX == target.CoordX)
+                    {
+                        largeTarget.CoordX = rnd.Next(2, Console.WindowWidth - 7);
+                        largeTarget.CoordY = rnd.Next(2, Console.WindowHeight - 10);
+                    }
+
+                    largeTarget.DrawTarget();
+                }
+
+                if (!hitSmallTarget && !hitBigTarget && !hitLTarget)
                 {
                     TargetMissed();
                 }
@@ -168,7 +189,7 @@ namespace AimTrainer
         public void TargetDestroyed()
         {
             this.NombreDeTirs++;
-            this.Score += 10;
+            this.Score += 5;
             this.NombreDeTirTouche++;
         }
 
